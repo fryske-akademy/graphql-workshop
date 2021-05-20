@@ -27,7 +27,7 @@
     <url>https://github.com/fryske-akademy/graphql-workshop</url>
 
     <description>
-        Parent for taal api and service
+        Parent for workshop api
         See https://github.com/fryske-akademy/graphql-workshop
     </description>
 
