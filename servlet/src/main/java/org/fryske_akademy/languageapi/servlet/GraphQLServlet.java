@@ -36,7 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-@WebServlet(name = "GraphQLLexiconServlet", urlPatterns = {"/graphql/*"}, loadOnStartup = 1)
+@WebServlet(name = "GraphQLWorkshopServlet", urlPatterns = {"/graphql/*"}, loadOnStartup = 1)
 public class GraphQLServlet extends GraphQLHttpServlet {
 
     @Inject
