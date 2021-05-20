@@ -1,0 +1,6 @@
+"api for workshop"
+type Query {
+    search: Result
+}
+type Result {
+}

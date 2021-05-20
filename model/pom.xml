@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gqlworkshopmodel</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <inceptionYear>2021</inceptionYear>
+
+    <parent>
+        <artifactId>gqlworkshopparent</artifactId>
+        <groupId>org.fryske-akademy.gqlworkshop</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>gqlworkshopmodel</name>
+
+    <description>
+        Contains graphql schema and generated types
+        See https://github.com/fryske-akademy/graphql-workshop
+    </description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.kobylynskyi</groupId>
+                <artifactId>graphql-codegen-maven-plugin</artifactId>
+                <!-- use the latest available version:
+                https://search.maven.org/artifact/io.github.kobylynskyi/graphql-codegen-maven-plugin -->
+                <version>4.1.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <graphqlSchemaPaths>
+                                <graphqlSchemaPath>${project.basedir}/src/main/resources/graphql/gqlworkshopapi.graphqls
+                                </graphqlSchemaPath>
+                            </graphqlSchemaPaths>
+                            <outputDir>${project.build.directory}/generated-sources/graphql</outputDir>
+                            <apiPackageName>org.fryske_akademy.gqlworkshopapi</apiPackageName>
+                            <modelPackageName>org.fryske_akademy.gqlworkshopmodel</modelPackageName>
+                            <generateApis>false</generateApis>
+                            <generateDataFetchingEnvironmentArgumentInApis>true</generateDataFetchingEnvironmentArgumentInApis>
+                            <customTypesMapping>
+                                <DateTime>java.util.Date</DateTime>
+                            </customTypesMapping>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>
