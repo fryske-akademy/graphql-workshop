@@ -1,3 +1,10 @@
-query search {
-    Result
+query greet ($name: String!="*") {
+    greet(name: $name) {
+        __typename
+        ... on HelloPers { ...named age }
+        ... on HelloOrg { ...named type }
+    }
+}
+fragment named on Named {
+    greeting name
 }

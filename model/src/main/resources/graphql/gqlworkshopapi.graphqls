@@ -1,6 +1,34 @@
 "api for workshop"
 type Query {
-    search: Result
+    greet ("who do you wnat to greet?" name: String!="*"): Greetings
 }
-type Result {
+"we have named subject available"
+interface Named {
+    greeting: String!
+    name: String!
+}
+"A person is a special Named subject"
+interface Person implements Named {
+    greeting: String!
+    name: String!
+    age: Int
+}
+"""
+We can greet an organisation of a certain type
+This can be described using multiple lines
+"""
+type HelloOrg implements Named {
+    "the greeting for this subject"
+    greeting: String!
+    name: String!
+    type: OrgType!
+}
+type HelloPers implements Named, Person {
+    greeting: String!
+    name: String!
+    age: Int
+}
+union Greetings = HelloOrg|HelloPers
+enum OrgType {
+    "enums can be commented" industry, education, unknown
 }
