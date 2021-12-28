@@ -20,13 +20,17 @@ package org.fryske_akademy.languageapi.servlet;
  * #L%
  */
 
+import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLConfiguration;
 import graphql.kickstart.servlet.GraphQLHttpServlet;
 import graphql.schema.GraphQLSchema;
+import graphql.schema.idl.CombinedWiringFactory;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
+import org.fryske_akademy.graphql.fetchers.instrumentation.AgeInstrumentation;
 import org.fryske_akademy.languagemodel.GraphQLSchemaBuilder;
-import org.fryske_akademy.languagemodel.ResultsFetcher;
+import org.fryske_akademy.languagemodel.GraphqlSimpleWiring;
+import org.fryske_akademy.languagemodel.GreetingsFetcher;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
@@ -35,12 +39,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 @WebServlet(name = "GraphQLWorkshopServlet", urlPatterns = {"/graphql/*"}, loadOnStartup = 1)
 public class GraphQLServlet extends GraphQLHttpServlet {
 
     @Inject
-    private ResultsFetcher resultsFetcher;
+    private GreetingsFetcher greetingsFetcher;
 
     @Inject
     private ErrorHandler errorHandler;
@@ -48,18 +53,26 @@ public class GraphQLServlet extends GraphQLHttpServlet {
     @Inject
     private GraphQLSchemaBuilder graphQLSchemaBuilder;
 
+    @Inject
+    private AgeInstrumentation ageInstrumentation;
+
     @Override
     protected GraphQLConfiguration getConfiguration() {
-        return GraphQLConfiguration.with(createSchema()).with(Arrays.asList(errorHandler)).build();
+        return GraphQLConfiguration
+                .with(createSchema())
+                .with(GraphQLQueryInvoker.newBuilder().with(List.of(ageInstrumentation)).build())
+                .with(Arrays.asList(errorHandler)).build();
     }
 
 
     private GraphQLSchema createSchema() {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 .type("Query",builder -> builder
-                        .dataFetcher("search", resultsFetcher)
+                        .dataFetcher("search", greetingsFetcher)
 
-                ).build();
+                )
+                .wiringFactory(new CombinedWiringFactory(List.of(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)))
+                .build();
         return new SchemaGenerator().makeExecutableSchema(graphQLSchemaBuilder.getTypeDefinitionRegistry(),runtimeWiring);
     }
 

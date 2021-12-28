@@ -1,6 +1,7 @@
 "api for workshop"
 type Query {
-    greet ("who do you wnat to greet?" name: String!="*"): Greetings
+    "this api has one function that will prepare Greeting objects for you"
+    greet ("who do you wnat to greet?" name: String!="*"): [Greetings]!
 }
 "we have named subject available"
 interface Named {
