@@ -20,6 +20,7 @@ package org.fryske_akademy.languageapi.servlet;
  * #L%
  */
 
+import graphql.kickstart.execution.GraphQLObjectMapper;
 import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLConfiguration;
 import graphql.kickstart.servlet.GraphQLHttpServlet;
@@ -38,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "GraphQLWorkshopServlet", urlPatterns = {"/graphql/*"}, loadOnStartup = 1)
@@ -48,7 +48,10 @@ public class GraphQLServlet extends GraphQLHttpServlet {
     private GreetingsFetcher greetingsFetcher;
 
     @Inject
-    private ErrorHandler errorHandler;
+    private ErrorListener errorListener;
+
+    @Inject
+    private DatafetchingErrorHandler datafetchingErrorHandler;
 
     @Inject
     private GraphQLSchemaBuilder graphQLSchemaBuilder;
@@ -61,7 +64,9 @@ public class GraphQLServlet extends GraphQLHttpServlet {
         return GraphQLConfiguration
                 .with(createSchema())
                 .with(GraphQLQueryInvoker.newBuilder().with(List.of(ageInstrumentation)).build())
-                .with(Arrays.asList(errorHandler)).build();
+                .with(List.of(errorListener))
+                .with(GraphQLObjectMapper.newBuilder().withGraphQLErrorHandler(datafetchingErrorHandler).build())
+                .build();
     }
 
 

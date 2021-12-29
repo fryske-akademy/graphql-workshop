@@ -21,17 +21,18 @@ package org.fryske_akademy.languageapi.servlet;
  */
 
 import graphql.kickstart.servlet.core.GraphQLServletListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.fryske_akademy.languagemodel.ErrorHandler;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RequestScoped
-public class ErrorHandler implements GraphQLServletListener {
+@ApplicationScoped
+public class ErrorListener implements GraphQLServletListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandler.class);
+    @Inject
+    private ErrorHandler errorHandler;
 
     @Override
     public RequestCallback onRequest(HttpServletRequest request, HttpServletResponse response) {
@@ -49,7 +50,8 @@ public class ErrorHandler implements GraphQLServletListener {
 
         @Override
         public void onError(HttpServletRequest request, HttpServletResponse response, Throwable throwable) {
-            if (throwable!=null) throwable.printStackTrace(System.err);
+            errorHandler.handle("unexpected exception", throwable);
         }
     }
+
 }
