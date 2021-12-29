@@ -1,4 +1,4 @@
-package org.fryske_akademy.languagemodel;
+package org.fryske_akademy.workshopmodel;
 
 /*-
  * #%L

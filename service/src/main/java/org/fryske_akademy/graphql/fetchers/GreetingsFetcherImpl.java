@@ -24,8 +24,7 @@ import graphql.schema.DataFetchingEnvironment;
 import org.fryske_akademy.gqlworkshopmodel.Greetings;
 import org.fryske_akademy.gqlworkshopmodel.HelloOrg;
 import org.fryske_akademy.gqlworkshopmodel.HelloPers;
-import org.fryske_akademy.gqlworkshopmodel.Person;
-import org.fryske_akademy.languagemodel.GreetingsFetcher;
+import org.fryske_akademy.workshopmodel.GreetingsFetcher;
 
 import javax.enterprise.context.RequestScoped;
 import java.util.List;
@@ -49,7 +48,7 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
 
         @Override
         public String name() {
-            return null;
+            return name;
         }
     }
 
@@ -61,7 +60,7 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
 
         @Override
         public String name() {
-            return null;
+            return name;
         }
     }
 
@@ -69,7 +68,12 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
     public List<Greetings> get(DataFetchingEnvironment environment) {
         String name = environment.getArgument("name");
         return Stream.concat(persons.stream().map(p-> new Pers(p)),organisations.stream().map(o->new Org(o)))
-                .filter(s -> s.name().contains(name))
+                .filter(s -> {
+                    String n = s.name();
+                        boolean hit = n.contains(name);
+                        return hit;
+                }
+                )
                 .map(s -> s instanceof Pers ?
                         HelloPers.builder()
                                 .setGreeting("hello person")

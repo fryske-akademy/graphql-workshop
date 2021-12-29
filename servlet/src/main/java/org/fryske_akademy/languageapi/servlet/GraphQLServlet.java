@@ -29,9 +29,9 @@ import graphql.schema.idl.CombinedWiringFactory;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import org.fryske_akademy.graphql.fetchers.instrumentation.AgeInstrumentation;
-import org.fryske_akademy.languagemodel.GraphQLSchemaBuilder;
-import org.fryske_akademy.languagemodel.GraphqlSimpleWiring;
-import org.fryske_akademy.languagemodel.GreetingsFetcher;
+import org.fryske_akademy.workshopmodel.GraphQLSchemaBuilder;
+import org.fryske_akademy.workshopmodel.GraphqlSimpleWiring;
+import org.fryske_akademy.workshopmodel.GreetingsFetcher;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
@@ -73,7 +73,7 @@ public class GraphQLServlet extends GraphQLHttpServlet {
     private GraphQLSchema createSchema() {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 .type("Query",builder -> builder
-                        .dataFetcher("search", greetingsFetcher)
+                        .dataFetcher("greet", greetingsFetcher)
 
                 )
                 .wiringFactory(new CombinedWiringFactory(List.of(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)))

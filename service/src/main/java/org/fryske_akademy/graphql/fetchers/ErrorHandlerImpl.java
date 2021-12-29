@@ -20,11 +20,13 @@ package org.fryske_akademy.graphql.fetchers;
  * #L%
  */
 
-import org.fryske_akademy.languagemodel.ErrorHandler;
+import org.fryske_akademy.workshopmodel.ErrorHandler;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 @ApplicationScoped
+@Named
 public class ErrorHandlerImpl implements ErrorHandler {
 
 

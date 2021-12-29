@@ -1,4 +1,4 @@
-package org.fryske_akademy.languagemodel;
+package org.fryske_akademy.workshopmodel;
 
 /*-
  * #%L
@@ -20,10 +20,11 @@ package org.fryske_akademy.languagemodel;
  * #L%
  */
 
-import graphql.schema.DataFetcher;
-import org.fryske_akademy.gqlworkshopmodel.Greetings;
+public interface ErrorHandler {
 
-import java.util.List;
+    default void handle(String message, Throwable throwable) {
+        System.err.println(message);
+        if (throwable!=null) throwable.printStackTrace(System.err);
+    };
 
-public interface GreetingsFetcher extends DataFetcher<List<Greetings>> {
 }

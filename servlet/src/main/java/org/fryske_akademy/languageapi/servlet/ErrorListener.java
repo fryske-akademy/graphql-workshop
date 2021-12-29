@@ -21,7 +21,7 @@ package org.fryske_akademy.languageapi.servlet;
  */
 
 import graphql.kickstart.servlet.core.GraphQLServletListener;
-import org.fryske_akademy.languagemodel.ErrorHandler;
+import org.fryske_akademy.workshopmodel.ErrorHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

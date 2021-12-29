@@ -23,7 +23,7 @@ package org.fryske_akademy.languageapi.servlet;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.kickstart.execution.error.DefaultGraphQLErrorHandler;
-import org.fryske_akademy.languagemodel.ErrorHandler;
+import org.fryske_akademy.workshopmodel.ErrorHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
