@@ -22,10 +22,15 @@ package org.fryske_akademy.graphql.fetchers;
 
 import graphql.schema.DataFetchingEnvironment;
 import org.fryske_akademy.gqlworkshopmodel.Greetings;
+import org.fryske_akademy.gqlworkshopmodel.HelloOrg;
+import org.fryske_akademy.gqlworkshopmodel.HelloPers;
+import org.fryske_akademy.gqlworkshopmodel.Person;
 import org.fryske_akademy.languagemodel.GreetingsFetcher;
 
 import javax.enterprise.context.RequestScoped;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequestScoped
 public class GreetingsFetcherImpl implements GreetingsFetcher {
@@ -34,9 +39,46 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
 
     private List<String> organisations = List.of("company", "shop", "factory");
 
+    private interface Name {String name();}
+
+    private static class Pers implements Name{ private final String name;
+
+        private Pers(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String name() {
+            return null;
+        }
+    }
+
+    private static class Org implements Name { private final String name;
+
+        private Org(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String name() {
+            return null;
+        }
+    }
+
     @Override
     public List<Greetings> get(DataFetchingEnvironment environment) {
         String name = environment.getArgument("name");
+        return Stream.concat(persons.stream().map(p-> new Pers(p)),organisations.stream().map(o->new Org(o)))
+                .filter(s -> s.name().contains(name))
+                .map(s -> s instanceof Pers ?
+                        HelloPers.builder()
+                                .setGreeting("hello person")
+                                .setName(s.name())
+                                .build() :
+                        HelloOrg.builder()
+                                .setGreeting("hello organization")
+                                .setName(s.name())
+                                .build()).collect(Collectors.toList());
 
     }
 }
