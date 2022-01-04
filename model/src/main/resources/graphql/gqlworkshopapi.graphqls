@@ -24,11 +24,16 @@ type HelloOrg implements Named {
     name: String!
     type: OrgType!
 }
+"""
+We can greet a person with a certain age
+Note HelloPers implements two interfaces
+"""
 type HelloPers implements Person & Named {
     greeting: String!
     name: String!
     age: Int
 }
+"a union is a bag of things, figure out runtime what you are dealing with"
 union Greetings = HelloOrg|HelloPers
 enum OrgType {
     "enums can be commented" industry, education, unknown

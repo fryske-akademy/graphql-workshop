@@ -22,6 +22,7 @@ package org.fryske_akademy.workshopmodel;
 
 import graphql.TypeResolutionEnvironment;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLSchema;
 import graphql.schema.TypeResolver;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaParser;
@@ -41,7 +42,7 @@ public class GraphQLSchemaBuilder {
 
     private final TypeDefinitionRegistry typeDefinitionRegistry;
 
-    private final TypeResolver typeResolver;
+    private GraphQLSchema graphQLSchema;
 
     public GraphQLSchemaBuilder() {
         try (
@@ -52,13 +53,6 @@ public class GraphQLSchemaBuilder {
             while ((c = stream.read())!=-1) out.write(c);
             schema = out.toString(StandardCharsets.UTF_8);
             typeDefinitionRegistry = new SchemaParser().parse(schema);
-            typeResolver = new TypeResolver() {
-                @Override
-                public GraphQLObjectType getType(TypeResolutionEnvironment env) {
-                    Object o = env.getObject();
-                    return env.getSchema().getObjectType(o.getClass().getSimpleName());
-                }
-            };
 
         } catch (IOException e) {
             throw new IllegalStateException("could not load graphql schema",e);
@@ -77,7 +71,15 @@ public class GraphQLSchemaBuilder {
         return typeDefinitionRegistry;
     }
 
-    public TypeResolver getTypeResolver() {
-        return typeResolver;
+    public GraphQLSchema getGraphQLSchema() {
+        return graphQLSchema;
+    }
+
+    /**
+     * call this method once your
+     * @param graphQLSchema
+     */
+    public void setGraphQLSchema(GraphQLSchema graphQLSchema) {
+        this.graphQLSchema = graphQLSchema;
     }
 }

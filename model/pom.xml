@@ -29,13 +29,14 @@
                 <artifactId>graphql-codegen-maven-plugin</artifactId>
                 <!-- use the latest available version:
                 https://search.maven.org/artifact/io.github.kobylynskyi/graphql-codegen-maven-plugin -->
-                <version>4.1.4</version>
+                <version>5.3.0</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+<!--                            a lot of options possible, see github -->
                             <graphqlSchemaPaths>
                                 <graphqlSchemaPath>${project.basedir}/src/main/resources/graphql/gqlworkshopapi.graphqls
                                 </graphqlSchemaPath>
@@ -43,9 +44,10 @@
                             <outputDir>${project.build.directory}/generated-sources/graphql</outputDir>
                             <apiPackageName>org.fryske_akademy.gqlworkshopapi</apiPackageName>
                             <modelPackageName>org.fryske_akademy.gqlworkshopmodel</modelPackageName>
+<!--                            we just want the pojo's, no boiler plate data fetchers-->
                             <generateApis>false</generateApis>
-                            <generateDataFetchingEnvironmentArgumentInApis>true</generateDataFetchingEnvironmentArgumentInApis>
                             <customTypesMapping>
+<!--                                just an example, you can customize mapping of scalars -->
                                 <DateTime>java.util.Date</DateTime>
                             </customTypesMapping>
                         </configuration>

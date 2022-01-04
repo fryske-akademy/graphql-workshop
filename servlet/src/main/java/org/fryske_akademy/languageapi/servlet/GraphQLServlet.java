@@ -33,6 +33,7 @@ import org.fryske_akademy.workshopmodel.GraphQLSchemaBuilder;
 import org.fryske_akademy.workshopmodel.GraphqlSimpleWiring;
 import org.fryske_akademy.workshopmodel.GreetingsFetcher;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -59,18 +60,30 @@ public class GraphQLServlet extends GraphQLHttpServlet {
     @Inject
     private AgeInstrumentation ageInstrumentation;
 
-    @Override
-    protected GraphQLConfiguration getConfiguration() {
-        return GraphQLConfiguration
-                .with(createSchema())
-                .with(GraphQLQueryInvoker.newBuilder().with(List.of(ageInstrumentation)).build())
-                .with(List.of(errorListener))
-                .with(GraphQLObjectMapper.newBuilder().withGraphQLErrorHandler(datafetchingErrorHandler).build())
-                .build();
+    /**
+     * cache the threadsafe configuration
+     */
+    private static GraphQLConfiguration configuration = null;
+
+    @PostConstruct
+    private void initConfig() {
+        if(configuration==null) {
+            createSchema();
+            configuration = GraphQLConfiguration
+                    .with(graphQLSchemaBuilder.getGraphQLSchema())
+                    .with(GraphQLQueryInvoker.newBuilder().with(List.of(ageInstrumentation)).build())
+                    .with(List.of(errorListener))
+                    .with(GraphQLObjectMapper.newBuilder().withGraphQLErrorHandler(datafetchingErrorHandler).build())
+                    .build();
+        }
     }
 
+    @Override
+    protected GraphQLConfiguration getConfiguration() {
+        return configuration;
+    }
 
-    private GraphQLSchema createSchema() {
+    private void createSchema() {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 .type("Query",builder -> builder
                         .dataFetcher("greet", greetingsFetcher)
@@ -78,7 +91,9 @@ public class GraphQLServlet extends GraphQLHttpServlet {
                 )
                 .wiringFactory(new CombinedWiringFactory(List.of(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)))
                 .build();
-        return new SchemaGenerator().makeExecutableSchema(graphQLSchemaBuilder.getTypeDefinitionRegistry(),runtimeWiring);
+        graphQLSchemaBuilder.setGraphQLSchema(
+                new SchemaGenerator().makeExecutableSchema(graphQLSchemaBuilder.getTypeDefinitionRegistry(),runtimeWiring)
+        );
     }
 
     @Override
