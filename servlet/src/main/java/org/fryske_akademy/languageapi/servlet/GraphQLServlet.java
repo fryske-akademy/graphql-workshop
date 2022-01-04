@@ -66,11 +66,16 @@ public class GraphQLServlet extends GraphQLHttpServlet {
     @PostConstruct
     private void initConfig() {
         if (configuration == null) {
+            // configuration is threadsafe, create once and reuse
             createSchema();
             configuration = GraphQLConfiguration
                     .with(graphQLSchemaBuilder.getGraphQLSchema())
+                    // register instrumentation with the query invoker
                     .with(GraphQLQueryInvoker.newBuilder().with(List.of(ageInstrumentation)).build())
+                    // https://www.graphql-java-kickstart.com/servlet/servlet-listener/
+                    // listen for servlet errors, handle via single CDI error handler
                     .with(List.of(errorListener))
+                    // listen for graphql errors not handled in data fetchers, handle via single CDI error handler
                     .with(GraphQLObjectMapper.newBuilder().withGraphQLErrorHandler(datafetchingErrorHandler).build())
                     .build();
         }
@@ -83,6 +88,7 @@ public class GraphQLServlet extends GraphQLHttpServlet {
 
     private void createSchema() {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
+                // register a CDI DataFetcher for each query
                 .type("Query", builder -> builder
                         .dataFetcher("greet", greetingsFetcher)
 

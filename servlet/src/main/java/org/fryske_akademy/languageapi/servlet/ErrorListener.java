@@ -36,17 +36,10 @@ public class ErrorListener implements GraphQLServletListener {
 
     @Override
     public RequestCallback onRequest(HttpServletRequest request, HttpServletResponse response) {
-        return new ErrorCallback(request,response);
+        return new ErrorCallback();
     }
 
     public class ErrorCallback implements RequestCallback {
-        private final HttpServletRequest request;
-        private final HttpServletResponse response;
-
-        public ErrorCallback(HttpServletRequest request, HttpServletResponse response) {
-            this.request = request;
-            this.response = response;
-        }
 
         @Override
         public void onError(HttpServletRequest request, HttpServletResponse response, Throwable throwable) {
