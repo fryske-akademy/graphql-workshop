@@ -9,9 +9,9 @@ package org.fryske_akademy.languageapi.servlet;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +24,6 @@ import graphql.kickstart.execution.GraphQLObjectMapper;
 import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLConfiguration;
 import graphql.kickstart.servlet.GraphQLHttpServlet;
-import graphql.schema.GraphQLSchema;
-import graphql.schema.idl.CombinedWiringFactory;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import org.fryske_akademy.graphql.fetchers.instrumentation.AgeInstrumentation;
@@ -67,7 +65,7 @@ public class GraphQLServlet extends GraphQLHttpServlet {
 
     @PostConstruct
     private void initConfig() {
-        if(configuration==null) {
+        if (configuration == null) {
             createSchema();
             configuration = GraphQLConfiguration
                     .with(graphQLSchemaBuilder.getGraphQLSchema())
@@ -85,14 +83,14 @@ public class GraphQLServlet extends GraphQLHttpServlet {
 
     private void createSchema() {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
-                .type("Query",builder -> builder
+                .type("Query", builder -> builder
                         .dataFetcher("greet", greetingsFetcher)
 
                 )
-                .wiringFactory(new CombinedWiringFactory(List.of(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)))
+                .wiringFactory(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)
                 .build();
         graphQLSchemaBuilder.setGraphQLSchema(
-                new SchemaGenerator().makeExecutableSchema(graphQLSchemaBuilder.getTypeDefinitionRegistry(),runtimeWiring)
+                new SchemaGenerator().makeExecutableSchema(graphQLSchemaBuilder.getTypeDefinitionRegistry(), runtimeWiring)
         );
     }
 

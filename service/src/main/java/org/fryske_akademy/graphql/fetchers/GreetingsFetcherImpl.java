@@ -67,6 +67,7 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
     @Override
     public List<Greetings> get(DataFetchingEnvironment environment) {
         String name = environment.getArgument("name");
+        boolean ageRequested = environment.getSelectionSet().contains("**age");
         return Stream.concat(persons.stream().map(p-> new Pers(p)),organisations.stream().map(o->new Org(o)))
                 .filter(s -> {
                     String n = s.name();
@@ -78,11 +79,16 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
                         HelloPers.builder()
                                 .setGreeting("hello person")
                                 .setName(s.name())
+                                .setAge(ageRequested ? getAge((Pers) s) : null)
                                 .build() :
                         HelloOrg.builder()
                                 .setGreeting("hello organization")
                                 .setName(s.name())
                                 .build()).collect(Collectors.toList());
 
+    }
+
+    private Integer getAge(Pers p) {
+        return Integer.valueOf(25);
     }
 }

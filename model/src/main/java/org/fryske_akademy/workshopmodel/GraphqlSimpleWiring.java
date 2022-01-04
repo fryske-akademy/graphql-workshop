@@ -28,6 +28,9 @@ import graphql.schema.idl.InterfaceWiringEnvironment;
 import graphql.schema.idl.UnionWiringEnvironment;
 import graphql.schema.idl.WiringFactory;
 
+/**
+ * wiring factory that resolves GraphQLObjectType from class.getSimpleName()
+ */
 public class GraphqlSimpleWiring implements WiringFactory {
 
     @Override

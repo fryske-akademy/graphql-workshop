@@ -20,10 +20,7 @@ package org.fryske_akademy.workshopmodel;
  * #L%
  */
 
-import graphql.TypeResolutionEnvironment;
-import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.TypeResolver;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
@@ -64,19 +61,23 @@ public class GraphQLSchemaBuilder {
     }
 
     /**
-     * Use this as {@link RuntimeWiring.Builder#type(String, UnaryOperator) typeresolver} for interfaces and unions
+     * Use this in {@link graphql.schema.idl.SchemaGenerator#makeExecutableSchema(TypeDefinitionRegistry, RuntimeWiring)}.
      * @return
      */
     public TypeDefinitionRegistry getTypeDefinitionRegistry() {
         return typeDefinitionRegistry;
     }
 
+    /**
+     * You may want to use this to execute graphql queries programmatically, see {@link graphql.GraphQL#newGraphQL(GraphQLSchema)}.
+     * @return
+     */
     public GraphQLSchema getGraphQLSchema() {
         return graphQLSchema;
     }
 
     /**
-     * call this method once your
+     * Call this method once your executable schema is ready
      * @param graphQLSchema
      */
     public void setGraphQLSchema(GraphQLSchema graphQLSchema) {

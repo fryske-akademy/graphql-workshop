@@ -7,7 +7,8 @@ This workshop shows a contract first graphql approach using CDI from Java EE.
 
 You will learn:
 
-- some of the schema possibilities
-- how to generate code
-- how error handling can be done
-- 
+- how to create a schema
+- how to generate code from a schema
+- how to build an executable schema with datafetchers
+- how to configure a kickstart servlet
+- how to do instrumentation, error handling and Type resolving via wiring factory
