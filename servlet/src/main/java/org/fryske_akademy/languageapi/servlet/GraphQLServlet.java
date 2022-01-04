@@ -19,7 +19,6 @@ package org.fryske_akademy.languageapi.servlet;
  * limitations under the License.
  * #L%
  */
-
 import graphql.kickstart.execution.GraphQLObjectMapper;
 import graphql.kickstart.execution.GraphQLQueryInvoker;
 import graphql.kickstart.servlet.GraphQLConfiguration;
@@ -90,8 +89,7 @@ public class GraphQLServlet extends GraphQLHttpServlet {
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 // register a CDI DataFetcher for each query
                 .type("Query", builder -> builder
-                        .dataFetcher("greet", greetingsFetcher)
-
+                .dataFetcher("greet", greetingsFetcher)
                 )
                 .wiringFactory(GraphqlSimpleWiring.GRAPHQL_SIMPLE_WIRING)
                 .build();

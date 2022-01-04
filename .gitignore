@@ -1,3 +1,7 @@
 /**/.idea/
 
 /**/*.iml
+/target/
+/model/target/
+/service/target/
+/servlet/target/

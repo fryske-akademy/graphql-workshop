@@ -30,13 +30,14 @@ import javax.enterprise.context.RequestScoped;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.fryske_akademy.gqlworkshopmodel.OrgType;
 
 @RequestScoped
 public class GreetingsFetcherImpl implements GreetingsFetcher {
 
     private List<String> persons = List.of("hilda", "piet", "klaas");
 
-    private List<String> organisations = List.of("company", "shop", "factory");
+    private List<String> organisations = List.of("company", "shop", "factory", "fryslân");
 
     private interface Name {String name();}
 
@@ -84,6 +85,7 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
                         HelloOrg.builder()
                                 .setGreeting("hello organization")
                                 .setName(s.name())
+                                .setType(OrgType.unknown)
                                 .build()).collect(Collectors.toList());
 
     }
