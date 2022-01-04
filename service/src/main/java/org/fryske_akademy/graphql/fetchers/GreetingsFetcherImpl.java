@@ -67,8 +67,12 @@ public class GreetingsFetcherImpl implements GreetingsFetcher {
 
     @Override
     public List<Greetings> get(DataFetchingEnvironment environment) {
+        // this could be a name requested by a user
         String name = environment.getArgument("name");
+
+        // using a FileSystem#getPathMatcher(glob) you can analyze the requested response fields
         boolean ageRequested = environment.getSelectionSet().contains("**age");
+
         return Stream.concat(persons.stream().map(p-> new Pers(p)),organisations.stream().map(o->new Org(o)))
                 .filter(s -> {
                     String n = s.name();
